@@ -69,6 +69,9 @@ def train(args):
     # batches each of size args.batch_size, of length args.seq_length
     data_loader = DataLoader(args.batch_size, args.seq_length, datasets, forcePreProcess=True)
 
+    if not os.path.exists('save_lstm'):
+        os.makedirs('save_lstm')
+
     # Save the arguments int the config file
     with open(os.path.join('save_lstm', 'config.pkl'), 'wb') as f:
         pickle.dump(args, f)
@@ -81,7 +84,7 @@ def train(args):
         # Initialize all the variables in the graph
         sess.run(tf.initialize_all_variables())
         # Add all the variables to the list of variables to be saved
-        saver = tf.train.Saver(tf.all_variables())
+        saver = tf.train.Saver(tf.global_variables())
 
         # For each epoch
         for e in range(args.num_epochs):
